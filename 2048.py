@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import random
 from enum import Enum
@@ -26,33 +28,26 @@ def shift_board():
 				BOARD[r, c-1] = BOARD[r, c]
 				BOARD[r, c] = 0
 
-def rotate_board(dir):
+def rotate_board(dir, undo: bool):
 	global BOARD
 	if dir == "right":
 		BOARD = np.rot90(BOARD, 2)
 	elif dir == "up":
-		BOARD = np.rot90(BOARD, 1)
+		BOARD = np.rot90(BOARD, 3 if undo else 1)
 	elif dir == "down":
-		BOARD = np.rot90(BOARD, 3)
+		BOARD = np.rot90(BOARD, 1 if undo else 3)
 
-def rotate_back():
-	global BOARD
-	if dir == "right":
-		BOARD = np.rot90(BOARD, 2)
-	elif dir == "up":
-		BOARD = np.rot90(BOARD, 3)
-	elif dir == "down":
-		BOARD = np.rot90(BOARD, 1)
+def clear_screen():
+	os.system("clear" if os.name == "posix" else "cls")
 
-os.system('cls')
-print(BOARD)
+clear_screen()
 insert_number()
-
+print(BOARD)
 while True:
 	dir = input()
-	rotate_board(dir)
+	rotate_board(dir, False)
 	shift_board()
-	rotate_back()
+	rotate_board(dir, True)
 	insert_number()
-	os.system('cls')
+	clear_screen()
 	print(BOARD)
